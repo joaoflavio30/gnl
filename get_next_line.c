@@ -19,7 +19,7 @@ int main()
 {
     int fd = open("fd.txt", O_RDONLY);
 	int i = 0;
-	while(i++<6)
+	while(i++<3)
     	printf("%s" ,get_next_line(fd));
     return (0);
 }
