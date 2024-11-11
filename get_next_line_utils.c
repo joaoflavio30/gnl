@@ -2,6 +2,24 @@
 #include "get_next_line.h"
 #include <string.h>
 
+
+char	*ft_strndup(const char *s, int n)
+{
+	size_t	s_length;
+	size_t	i;
+	char	*duplicate;
+
+	s_length = strlen(s);
+	i = 0;
+	duplicate = (char *) malloc((s_length + 1) * sizeof(char));
+	if (!duplicate)
+		return (NULL);
+	while (*s && n > -1)
+		duplicate[i++] = *s++;
+	duplicate[i] = '\0';
+	return (duplicate);
+}
+
 char	*ft_strchr(const char *str, int search_str)
 {
 	if (str == NULL)
@@ -23,7 +41,7 @@ t_list	*ft_lstnew(char *content)
 	node = (t_list *) malloc(sizeof(t_list));
 	if (!node)
 		return (NULL);
-	node->buf = content;
+	node->buf = strdup(content);
 	node->next = NULL;
 	return (node);
 }
@@ -68,6 +86,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str[s1_len] = '\0';
 	return (str);
 }
+/* void append(t_list **list, char *line)
+{
+	t_list	*node =
+} */
 
 // void append(t_list **list, char *buf)
 // {
@@ -144,46 +166,39 @@ char *copy(t_list **list)
 
 char    *create_list(t_list **list, int fd)
 {
-    int bytes_read;
-    char buf[BUFFER_SIZE + 1];
+	char	*buf;
+	int		bytes;
 	t_list	*node;
-    int i;
-	int j;
-	char *str;
+	int i = 0;
+	int j = 0;
+	char line[1024];
 
-	str = malloc(1000);
-	node = malloc(sizeof(t_list));
-	j = 0;
-    i = 0;
-    while ((bytes_read = read(fd, buf, BUFFER_SIZE)) > 0)
-    {
-		while(buf[i])
+	node = NULL;
+	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	while ((bytes = read(fd, buf, BUFFER_SIZE)) > 0)
+	{
+		while (buf[i])
 		{
-			if (buf[i] != '\n')
-			{
-				str[j] = buf[i];
-				j++;
-				i++;
-				continue;
-			}
 			if (buf[i] == '\n')
 			{
-				str[j] = buf[i];
-				str[++j] = '\0';
-				node = ft_lstnew(str);
-				node->buf = strdup(str);
-				ft_lstadd_back(list, node);
+				line[j+1] = '\0';
+				line[j] = buf[i];
+				ft_lstadd_back(list, &(ft_lstnew(line)))
 				j = 0;
-				i++;
-				continue;
 			}
+			else
+			{
+				line[j] = buf[i];
+				j++;
+			}
+			i++;
 		}
-		if (buf[i] && j > 0)
-			str[j] = '\0';
-		if (j == 0)
-			break;
-    }
-	node = node->next;
-    return copy(list);
+	}
+	if (j > 0)
+	{
+		line[j] = '\0';
+		ft_lstadd_back(list, &(ft_lstnew(line)))
+	}
+	return node;
 }
 
