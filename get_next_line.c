@@ -9,9 +9,9 @@ char *get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0))
 		return (NULL);
 
-	next_line = create_list(&list, fd);
-	while(list)
-		list = list->next;
+	create_list(&list, fd);
+	next_line = get_line(list);
+	clean_list(&list);
 	return (next_line);
 }
 
@@ -19,7 +19,7 @@ int main()
 {
     int fd = open("fd.txt", O_RDONLY);
 	int i = 0;
-	while(i++<3)
+	while(i++<5)
     	printf("%s" ,get_next_line(fd));
     return (0);
 }

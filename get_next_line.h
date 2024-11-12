@@ -1,5 +1,6 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+# define BUFFER_SIZE 10
 
 #include <fcntl.h>
 #include <stdlib.h>
@@ -11,6 +12,9 @@ typedef struct s_list {
     struct s_list *next;
 } t_list;
 
-char    *create_list(t_list **list, int fd);
+void    create_list(t_list **list, int fd);
+char    *get_line(t_list *list);
+void    free_list(t_list **list, t_list *new_node, char *buf);
+void    clean_list(t_list **list);
 
 #endif
