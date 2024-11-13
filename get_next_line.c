@@ -10,6 +10,8 @@ char *get_next_line(int fd)
 		return (NULL);
 
 	create_list(&list, fd);
+	if(list == NULL)
+		return (NULL);
 	next_line = get_line(list);
 	clean_list(&list);
 	return (next_line);
@@ -17,9 +19,8 @@ char *get_next_line(int fd)
 
 int main()
 {
+	char *line;
     int fd = open("fd.txt", O_RDONLY);
-	int i = 0;
-	while(i++<5)
-    	printf("%s" ,get_next_line(fd));
-    return (0);
+	while((line = get_next_line(fd)))
+    	printf("%s", line);
 }

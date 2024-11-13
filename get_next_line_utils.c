@@ -2,6 +2,26 @@
 #include "get_next_line.h"
 #include <string.h>
 
+int	found_newline(t_list *list)
+{
+	int	i;
+
+	if (NULL == list)
+		return (0);
+	while (list)
+	{
+		i = 0;
+		while (list->buf[i] && i < BUFFER_SIZE)
+		{
+			if (list->buf[i] == '\n')
+				return (1);
+			++i;
+		}
+		list = list->next;
+	}
+	return (0);
+}
+
 char	*ft_strchr(const char *str, int search_str)
 {
 	if (str == NULL)
@@ -23,7 +43,7 @@ t_list	*ft_lstnew(char *content)
 	node = (t_list *) malloc(sizeof(t_list));
 	if (!node)
 		return (NULL);
-	node->buf = strdup(content);
+	node->buf = content;
 	node->next = NULL;
 	return (node);
 }
@@ -54,6 +74,9 @@ void	ft_lstadd_back(t_list **lst, char *buf)
 void	free_list(t_list **list, t_list *new_node, char* buf)
 {
 	t_list	*temp;
+
+	if (*list == NULL)
+		return ;
 	while(*list)
 	{
 		temp = (*list)->next;
@@ -61,6 +84,7 @@ void	free_list(t_list **list, t_list *new_node, char* buf)
 		free((*list));
 		(*list) = temp;
 	}
+	*list = NULL;
 	if (new_node->buf[0])
 		(*list) = new_node;
 	else
@@ -78,8 +102,10 @@ void	clean_list(t_list **list)
 	int		i;
 	int		j;
 
-	buf = strdup((*list)->buf);
+	buf = malloc(BUFFER_SIZE + 1);
 	clean_node = malloc(sizeof(t_list));
+	if (!buf || !clean_node)
+		return ;
 	last_node = find_last_node(*list);
 
 	i = 0;
@@ -98,6 +124,8 @@ int	index_newline(t_list *list)
 {
 	int	i;
 	int j;
+	if (list == NULL)
+		return (0);
 
 	j = 0;
 	while(list)
@@ -123,6 +151,8 @@ void	copy_str(t_list *list, char *str)
 	int	i;
 	int j;
 
+	if(list == NULL)
+		return ;
 	j = 0;
 	while(list)
 	{
@@ -131,7 +161,7 @@ void	copy_str(t_list *list, char *str)
 		{
 			if (list->buf[i] == '\n')
 			{
-				str[j] = list->buf[i];
+				str[j] = '\n';
 				str[++j] = '\0';
 				return ;
 			}
@@ -141,6 +171,7 @@ void	copy_str(t_list *list, char *str)
 		}
 		list = list->next;
 	}
+	str[j] = '\0';
 }
 
 char	*get_line(t_list *list)
@@ -150,7 +181,8 @@ char	*get_line(t_list *list)
 
 	str_len = index_newline(list);
 	str = malloc(str_len + 1);
-
+	if (!str)
+		return (NULL);
 	copy_str(list, str);
 	return (str);
 }
@@ -160,17 +192,19 @@ void	create_list(t_list **list, int fd)
 	char	*buf;
 	int		bytes;
 
-	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (buf == NULL)
-		return ;
-	while ((bytes = read(fd, buf, BUFFER_SIZE)) > 0)
+	while (!found_newline(*list))
 	{
+		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 		if(buf == NULL)
 			return ;
+		bytes = read(fd, buf, BUFFER_SIZE);
+		if (!bytes)
+		{
+			free(buf);
+			return ;
+		}
 		buf[bytes] = '\0';
 		ft_lstadd_back(list, buf);
-		if(ft_strchr(buf, '\n'))
-			break;
 	}
 }
 
