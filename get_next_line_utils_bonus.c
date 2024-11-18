@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	found_newline(t_list *list)
 {
@@ -81,22 +81,22 @@ int	index_newline(t_list *list)
 	return (j);
 }
 
-void	free_list(t_list **list, t_list *new_node, char* buf)
+void	free_list(t_list **list, t_list *new_node, char* buf, int fd)
 {
 	t_list	*temp;
 
-	if (*list == NULL)
+	if (list[fd] == NULL)
 		return ;
-	while(*list)
+	while(list[fd])
 	{
-		temp = (*list)->next;
-		free((*list)->buf);
-		free(*list);
-		*list = temp;
+		temp = (list[fd])->next;
+		free((list[fd])->buf);
+		free(list[fd]);
+		list[fd] = temp;
 	}
-	*list = NULL;
+	list[fd] = NULL;
 	if (new_node->buf[0])
-		*list = new_node;
+		list[fd] = new_node;
 	else
 	{
 		free(buf);

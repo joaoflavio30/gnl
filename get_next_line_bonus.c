@@ -1,6 +1,6 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-void	clean_list(t_list **list)
+void	clean_list(t_list **list, int fd)
 {
 	t_list	*last_node;
 	t_list	*clean_node;
@@ -12,7 +12,7 @@ void	clean_list(t_list **list)
 	clean_node = malloc(sizeof(t_list));
 	if (buf == NULL || clean_node == NULL)
 		return ;
-	last_node = find_last_node(*list);
+	last_node = find_last_node(list[fd]);
 
 	i = 0;
 	j = 0;
@@ -23,7 +23,7 @@ void	clean_list(t_list **list)
 	buf[j] = '\0';
 	clean_node->buf = buf;
 	clean_node->next = NULL;
-	free_list(list, clean_node, buf);
+	free_list(list, clean_node, buf, fd);
 }
 
 char	*get_line(t_list *list)
@@ -41,7 +41,7 @@ char	*get_line(t_list *list)
 	return (str);
 }
 
-void	ft_lstadd_back(t_list **lst, char *buf)
+void	ft_lstadd_back(t_list **lst, char *buf, int fd)
 {
 	t_list	*new;
 	t_list	*last_node;
@@ -49,9 +49,9 @@ void	ft_lstadd_back(t_list **lst, char *buf)
 	new = malloc(sizeof(t_list));
 	if (!new)
 		return ;
-	last_node = find_last_node(*lst);
-	if (*lst == NULL)
-		*lst = new;
+	last_node = find_last_node(lst[fd]);
+	if (lst[fd] == NULL)
+		lst[fd] = new;
 	else
 		last_node->next = new;
 	new->buf = buf;
@@ -63,7 +63,7 @@ void	create_list(t_list **list, int fd)
 	char	*buf;
 	int		bytes;
 
-	while (!found_newline(*list))
+	while (!found_newline(list[fd]))
 	{
 		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 		if(buf == NULL)
@@ -75,22 +75,22 @@ void	create_list(t_list **list, int fd)
 			return ;
 		}
 		buf[bytes] = '\0';
-		ft_lstadd_back(list, buf);
+		ft_lstadd_back(list, buf, fd);
 	}
 }
 
 char *get_next_line(int fd)
 {
-	static t_list *list;
+	static t_list *list[4096];
 	char *next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
+	if (fd < 0 || fd > 4095 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
 
-	create_list(&list, fd);
-	if(!list)
+	create_list(list, fd);
+	if(!list[fd])
 		return (NULL);
-	next_line = get_line(list);
-	clean_list(&list);
+	next_line = get_line(list[fd]);
+	clean_list(list, fd);
 	return (next_line);
 }
