@@ -1,13 +1,25 @@
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcardoso <jcardoso@student.42.rio>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/21 12:56:13 by jcardoso          #+#    #+#             */
+/*   Updated: 2024/11/21 12:56:13 by jcardoso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10 
+#  define BUFFER_SIZE 10
 # endif
 
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 typedef struct s_list
 {

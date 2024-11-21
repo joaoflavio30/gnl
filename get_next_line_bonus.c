@@ -1,24 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcardoso <jcardoso@student.42.rio>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/21 12:52:49 by jcardoso          #+#    #+#             */
+/*   Updated: 2024/11/21 12:52:49 by jcardoso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 void	clean_list(t_list **list, int fd)
 {
-	t_list	*last_node;
-	t_list	*clean_node;
-	int		i;
-	int		j;
-	char	*buf;
+	t_list			*last_node;
+	t_list			*clean_node;
+	int				i;
+	int				j;
+	char			*buf;
 
 	buf = malloc(BUFFER_SIZE + 1);
 	clean_node = malloc(sizeof(t_list));
 	if (buf == NULL || clean_node == NULL)
 		return ;
 	last_node = find_last_node(list[fd]);
-
 	i = 0;
 	j = 0;
-	while(last_node->buf[i] && last_node->buf[i] != '\n')
+	while (last_node->buf[i] && last_node->buf[i] != '\n')
 		i++;
-	while(last_node->buf[i] && last_node->buf[++i])
+	while (last_node->buf[i] && last_node->buf[++i])
 		buf[j++] = last_node->buf[i];
 	buf[j] = '\0';
 	clean_node->buf = buf;
@@ -28,8 +39,8 @@ void	clean_list(t_list **list, int fd)
 
 char	*get_line(t_list *list)
 {
-	char *str;
-	int	str_len;
+	char	*str;
+	int		str_len;
 
 	if (list == NULL)
 		return (NULL);
@@ -66,7 +77,7 @@ void	create_list(t_list **list, int fd)
 	while (!found_newline(list[fd]))
 	{
 		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-		if(buf == NULL)
+		if (buf == NULL)
 			return ;
 		bytes = read(fd, buf, BUFFER_SIZE);
 		if (!bytes)
@@ -79,16 +90,15 @@ void	create_list(t_list **list, int fd)
 	}
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static t_list *list[4096];
-	char *next_line;
+	static t_list	*list[4096];
+	char			*next_line;
 
 	if (fd < 0 || fd > 4095 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
-
 	create_list(list, fd);
-	if(!list[fd])
+	if (!list[fd])
 		return (NULL);
 	next_line = get_line(list[fd]);
 	clean_list(list, fd);
