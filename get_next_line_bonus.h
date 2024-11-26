@@ -6,7 +6,7 @@
 /*   By: jcardoso <jcardoso@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 12:56:13 by jcardoso          #+#    #+#             */
-/*   Updated: 2024/11/21 12:56:13 by jcardoso         ###   ########.fr       */
+/*   Updated: 2024/11/25 16:33:32 by jcardoso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 # define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 42
 # endif
 
-# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 

@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
 	static t_list	*list[1024];
 	char			*next_line;
 
-	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
+	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
 	create_list(list, fd);
 	if (!list[fd])

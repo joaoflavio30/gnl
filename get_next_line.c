@@ -6,7 +6,7 @@
 /*   By: jcardoso <jcardoso@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 12:41:13 by jcardoso          #+#    #+#             */
-/*   Updated: 2024/11/21 12:41:13 by jcardoso         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:33:04 by jcardoso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
 	static t_list	*list;
 	char			*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	create_list(&list, fd);
 	if (!list)
