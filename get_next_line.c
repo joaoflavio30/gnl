@@ -6,7 +6,7 @@
 /*   By: jcardoso <jcardoso@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 12:41:13 by jcardoso          #+#    #+#             */
-/*   Updated: 2024/11/26 12:33:04 by jcardoso         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:14:27 by jcardoso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	create_list(t_list **list, int fd)
 		if (buf == NULL)
 			return ;
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (!bytes)
+		if (!bytes || bytes < 0)
 		{
 			free(buf);
 			return ;

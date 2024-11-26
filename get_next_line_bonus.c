@@ -80,7 +80,7 @@ void	create_list(t_list **list, int fd)
 		if (buf == NULL)
 			return ;
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (!bytes)
+		if (!bytes || bytes < 0)
 		{
 			free(buf);
 			return ;
